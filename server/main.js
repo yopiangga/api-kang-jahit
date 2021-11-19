@@ -1,31 +1,116 @@
 import { Meteor } from 'meteor/meteor';
-import { LinksCollection } from '/imports/api/links';
 
-function insertLink({ title, url }) {
-  LinksCollection.insert({title, url, createdAt: new Date()});
+if (Meteor.isServer) {
+  Meteor.startup(() => {
+    User = new Meteor.Collection('user');
+
+  });
+
+  Router.route('/users', { where: 'server' })
+    .get(function () {
+      var response = User.find().fetch();
+      this.response.setHeader('Content-Type', 'application/json');
+      this.response.end(JSON.stringify(response));
+    })
+
+    .post(function () {
+      var response;
+      if (this.request.body.userName === undefined || this.request.body.userPassword === undefined) {
+        response = {
+          "error": true,
+          "message": "invalid data"
+        };
+      } else {
+        User.insert({
+          UserName: this.request.body.userName,
+          UserPassword: this.request.body.userPassword
+        });
+        response = {
+          "error": false,
+          "message": "User added."
+        }
+      }
+      this.response.setHeader('Content-Type', 'application/json');
+      this.response.end(JSON.stringify(response));
+    });
+
+  Router.route('/users/:id', { where: 'server' })
+
+    // GET /message/:id - returns specific records
+
+    .get(function () {
+      var response;
+      if (this.params.id !== undefined) {
+        var data = User.find({ _id: this.params.id }).fetch();
+        if (data.length > 0) {
+          response = data
+        } else {
+          response = {
+            "error": true,
+            "message": "User not found."
+          }
+        }
+      }
+      this.response.setHeader('Content-Type', 'application/json');
+      this.response.end(JSON.stringify(response));
+    })
+
+    // PUT /message/:id {message as put data}- update specific records.
+
+    .put(function () {
+      var response;
+      if (this.params.id !== undefined) {
+        var data = User.find({ _id: this.params.id }).fetch();
+        if (data.length > 0) {
+          if (User.update({ _id: data[0]._id }, { $set: { UserName: this.request.body.userName, UserPassword: this.request.body.userPassword } }) === 1) {
+            response = {
+              "error": false,
+              "message": "User information updated."
+            }
+          } else {
+            response = {
+              "error": true,
+              "message": "User information not updated."
+            }
+          }
+        } else {
+          response = {
+            "error": true,
+            "message": "User not found."
+          }
+        }
+      }
+      this.response.setHeader('Content-Type', 'application/json');
+      this.response.end(JSON.stringify(response));
+    })
+
+    // DELETE /message/:id delete specific record.
+
+    .delete(function () {
+      var response;
+      if (this.params.id !== undefined) {
+        var data = User.find({ _id: this.params.id }).fetch();
+        if (data.length > 0) {
+          if (User.remove(data[0]._id) === 1) {
+            response = {
+              "error": false,
+              "message": "User deleted."
+            }
+          } else {
+            response = {
+              "error": true,
+              "message": "User not deleted."
+            }
+          }
+        } else {
+          response = {
+            "error": true,
+            "message": "User not found."
+          }
+        }
+      }
+      this.response.setHeader('Content-Type', 'application/json');
+      this.response.end(JSON.stringify(response));
+    });
+
 }
-
-Meteor.startup(() => {
-  // If the Links collection is empty, add some data.
-  if (LinksCollection.find().count() === 0) {
-    insertLink({
-      title: 'Do the Tutorial',
-      url: 'https://www.meteor.com/tutorials/react/creating-an-app'
-    });
-
-    insertLink({
-      title: 'Follow the Guide',
-      url: 'http://guide.meteor.com'
-    });
-
-    insertLink({
-      title: 'Read the Docs',
-      url: 'https://docs.meteor.com'
-    });
-
-    insertLink({
-      title: 'Discussions',
-      url: 'https://forums.meteor.com'
-    });
-  }
-});
