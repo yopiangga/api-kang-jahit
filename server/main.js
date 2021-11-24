@@ -1,5 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { Konveksi } from './konveksi/Konveksi';
+import { Order } from './order/Order';
+import { Penjahit } from './penjahit/Penjahit';
 
 if (Meteor.isServer) {
   Meteor.startup(() => {
@@ -7,6 +9,8 @@ if (Meteor.isServer) {
   });
 
   Konveksi();
+  Penjahit();
+  Order();
 
   Router.route('/users', { where: 'server' })
     .get(function () {
