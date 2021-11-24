@@ -33,7 +33,7 @@ export function Konveksi() {
           message: "invalid data",
         };
       } else {
-        User.insert({
+        konveksi.insert({
           email: this.request.body.email,
           deskripsi: this.request.body.deskripsi,
           alamat: this.request.body.alamat,
@@ -89,7 +89,7 @@ export function Konveksi() {
         var data = konveksi.find({ _id: this.params.id }).fetch();
         if (data.length > 0) {
           if (
-            User.update(
+            konveksi.update(
               { _id: data[0]._id },
               {
                 $set: {
@@ -141,7 +141,7 @@ export function Konveksi() {
       if (this.params.id !== undefined) {
         var data = konveksi.find({ _id: this.params.id }).fetch();
         if (data.length > 0) {
-          if (User.remove(data[0]._id) === 1) {
+          if (konveksi.remove(data[0]._id) === 1) {
             response = {
               error: false,
               message: "Konveksi deleted.",

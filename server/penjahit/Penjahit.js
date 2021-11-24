@@ -33,7 +33,7 @@ export function Penjahit() {
           message: "invalid data",
         };
       } else {
-        User.insert({
+        penjahit.insert({
           alamat: this.request.body.alamat,
           kota: this.request.body.kota,
           provinsi: this.request.body.provinsi,
@@ -89,7 +89,7 @@ export function Penjahit() {
         var data = penjahit.find({ _id: this.params.id }).fetch();
         if (data.length > 0) {
           if (
-            User.update(
+            penjahit.update(
               { _id: data[0]._id },
               {
                 $set: {
@@ -141,7 +141,7 @@ export function Penjahit() {
       if (this.params.id !== undefined) {
         var data = penjahit.find({ _id: this.params.id }).fetch();
         if (data.length > 0) {
-          if (User.remove(data[0]._id) === 1) {
+          if (penjahit.remove(data[0]._id) === 1) {
             response = {
               error: false,
               message: "penjahit deleted.",
