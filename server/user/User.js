@@ -6,6 +6,7 @@ export function User() {
   Router.route("/user", { where: "server" })
     .get(function () {
       var response = user.find().fetch();
+      
       this.response.setHeader("Content-Type", "application/json");
       this.response.end(JSON.stringify(response));
     })
@@ -13,6 +14,7 @@ export function User() {
     .post(function () {
       var response;
       if (
+        this.request.body.uid === undefined ||
         this.request.body.alamat === undefined ||
         this.request.body.kota === undefined ||
         this.request.body.provinsi === undefined ||
@@ -38,6 +40,7 @@ export function User() {
         };
       } else {
         user.insert({
+          uid: this.request.body.uid,
           alamat: this.request.body.alamat,
           kota: this.request.body.kota,
           provinsi: this.request.body.provinsi,
@@ -77,7 +80,7 @@ export function User() {
     .get(function () {
       var response;
       if (this.params.id !== undefined) {
-        var data = user.find({ _id: this.params.id }).fetch();
+        var data = user.find({ uid: this.params.id }).fetch();
         if (data.length > 0) {
           response = data;
         } else {
@@ -103,6 +106,7 @@ export function User() {
               { _id: data[0]._id },
               {
                 $set: {
+                  uid: this.request.body.uid,
                   alamat: this.request.body.alamat,
                   kota: this.request.body.kota,
                   provinsi: this.request.body.provinsi,
