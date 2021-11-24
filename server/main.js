@@ -1,7 +1,9 @@
 import { Meteor } from 'meteor/meteor';
 import { Konveksi } from './konveksi/Konveksi';
 import { Order } from './order/Order';
+import { Pencairan } from './pencairan/Pencairan';
 import { Penjahit } from './penjahit/Penjahit';
+import { Topup } from './topup/Topup';
 
 if (Meteor.isServer) {
   Meteor.startup(() => {
@@ -11,112 +13,114 @@ if (Meteor.isServer) {
   Konveksi();
   Penjahit();
   Order();
+  Pencairan();
+  Topup();
 
-  Router.route('/users', { where: 'server' })
-    .get(function () {
-      var response = User.find().fetch();
-      this.response.setHeader('Content-Type', 'application/json');
-      this.response.end(JSON.stringify(response));
-    })
+  // Router.route('/users', { where: 'server' })
+  //   .get(function () {
+  //     var response = User.find().fetch();
+  //     this.response.setHeader('Content-Type', 'application/json');
+  //     this.response.end(JSON.stringify(response));
+  //   })
 
-    .post(function () {
-      var response;
-      if (this.request.body.userName === undefined || this.request.body.userPassword === undefined) {
-        response = {
-          "error": true,
-          "message": "invalid data"
-        };
-      } else {
-        User.insert({
-          UserName: this.request.body.userName,
-          UserPassword: this.request.body.userPassword
-        });
-        response = {
-          "error": false,
-          "message": "User added."
-        }
-      }
-      this.response.setHeader('Content-Type', 'application/json');
-      this.response.end(JSON.stringify(response));
-    });
+  //   .post(function () {
+  //     var response;
+  //     if (this.request.body.userName === undefined || this.request.body.userPassword === undefined) {
+  //       response = {
+  //         "error": true,
+  //         "message": "invalid data"
+  //       };
+  //     } else {
+  //       User.insert({
+  //         UserName: this.request.body.userName,
+  //         UserPassword: this.request.body.userPassword
+  //       });
+  //       response = {
+  //         "error": false,
+  //         "message": "User added."
+  //       }
+  //     }
+  //     this.response.setHeader('Content-Type', 'application/json');
+  //     this.response.end(JSON.stringify(response));
+  //   });
 
-  Router.route('/users/:id', { where: 'server' })
+  // Router.route('/users/:id', { where: 'server' })
 
-    // GET /message/:id - returns specific records
+  //   // GET /message/:id - returns specific records
 
-    .get(function () {
-      var response;
-      if (this.params.id !== undefined) {
-        var data = User.find({ _id: this.params.id }).fetch();
-        if (data.length > 0) {
-          response = data
-        } else {
-          response = {
-            "error": true,
-            "message": "User not found."
-          }
-        }
-      }
-      this.response.setHeader('Content-Type', 'application/json');
-      this.response.end(JSON.stringify(response));
-    })
+  //   .get(function () {
+  //     var response;
+  //     if (this.params.id !== undefined) {
+  //       var data = User.find({ _id: this.params.id }).fetch();
+  //       if (data.length > 0) {
+  //         response = data
+  //       } else {
+  //         response = {
+  //           "error": true,
+  //           "message": "User not found."
+  //         }
+  //       }
+  //     }
+  //     this.response.setHeader('Content-Type', 'application/json');
+  //     this.response.end(JSON.stringify(response));
+  //   })
 
-    // PUT /message/:id {message as put data}- update specific records.
+  //   // PUT /message/:id {message as put data}- update specific records.
 
-    .put(function () {
-      var response;
-      if (this.params.id !== undefined) {
-        var data = User.find({ _id: this.params.id }).fetch();
-        if (data.length > 0) {
-          if (User.update({ _id: data[0]._id }, { $set: { UserName: this.request.body.userName, UserPassword: this.request.body.userPassword } }) === 1) {
-            response = {
-              "error": false,
-              "message": "User information updated."
-            }
-          } else {
-            response = {
-              "error": true,
-              "message": "User information not updated."
-            }
-          }
-        } else {
-          response = {
-            "error": true,
-            "message": "User not found."
-          }
-        }
-      }
-      this.response.setHeader('Content-Type', 'application/json');
-      this.response.end(JSON.stringify(response));
-    })
+  //   .put(function () {
+  //     var response;
+  //     if (this.params.id !== undefined) {
+  //       var data = User.find({ _id: this.params.id }).fetch();
+  //       if (data.length > 0) {
+  //         if (User.update({ _id: data[0]._id }, { $set: { UserName: this.request.body.userName, UserPassword: this.request.body.userPassword } }) === 1) {
+  //           response = {
+  //             "error": false,
+  //             "message": "User information updated."
+  //           }
+  //         } else {
+  //           response = {
+  //             "error": true,
+  //             "message": "User information not updated."
+  //           }
+  //         }
+  //       } else {
+  //         response = {
+  //           "error": true,
+  //           "message": "User not found."
+  //         }
+  //       }
+  //     }
+  //     this.response.setHeader('Content-Type', 'application/json');
+  //     this.response.end(JSON.stringify(response));
+  //   })
 
-    // DELETE /message/:id delete specific record.
+  //   // DELETE /message/:id delete specific record.
 
-    .delete(function () {
-      var response;
-      if (this.params.id !== undefined) {
-        var data = User.find({ _id: this.params.id }).fetch();
-        if (data.length > 0) {
-          if (User.remove(data[0]._id) === 1) {
-            response = {
-              "error": false,
-              "message": "User deleted."
-            }
-          } else {
-            response = {
-              "error": true,
-              "message": "User not deleted."
-            }
-          }
-        } else {
-          response = {
-            "error": true,
-            "message": "User not found."
-          }
-        }
-      }
-      this.response.setHeader('Content-Type', 'application/json');
-      this.response.end(JSON.stringify(response));
-    });
+  //   .delete(function () {
+  //     var response;
+  //     if (this.params.id !== undefined) {
+  //       var data = User.find({ _id: this.params.id }).fetch();
+  //       if (data.length > 0) {
+  //         if (User.remove(data[0]._id) === 1) {
+  //           response = {
+  //             "error": false,
+  //             "message": "User deleted."
+  //           }
+  //         } else {
+  //           response = {
+  //             "error": true,
+  //             "message": "User not deleted."
+  //           }
+  //         }
+  //       } else {
+  //         response = {
+  //           "error": true,
+  //           "message": "User not found."
+  //         }
+  //       }
+  //     }
+  //     this.response.setHeader('Content-Type', 'application/json');
+  //     this.response.end(JSON.stringify(response));
+  //   });
 
 }
