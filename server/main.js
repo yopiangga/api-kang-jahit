@@ -1,8 +1,7 @@
 import { Meteor } from 'meteor/meteor';
-import { Konveksi } from './konveksi/Konveksi';
 import { Order } from './order/Order';
 import { Pencairan } from './pencairan/Pencairan';
-import { Penjahit } from './penjahit/Penjahit';
+import { User } from './user/User';
 import { Topup } from './topup/Topup';
 
 if (Meteor.isServer) {
@@ -10,8 +9,7 @@ if (Meteor.isServer) {
     User = new Meteor.Collection('user');
   });
 
-  Konveksi();
-  Penjahit();
+  User();
   Order();
   Pencairan();
   Topup();
