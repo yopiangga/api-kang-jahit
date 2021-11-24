@@ -1,10 +1,12 @@
 import { Meteor } from 'meteor/meteor';
+import { Konveksi } from './konveksi/Konveksi';
 
 if (Meteor.isServer) {
   Meteor.startup(() => {
     User = new Meteor.Collection('user');
-
   });
+
+  Konveksi();
 
   Router.route('/users', { where: 'server' })
     .get(function () {
