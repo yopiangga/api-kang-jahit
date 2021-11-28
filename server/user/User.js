@@ -42,8 +42,6 @@ export function User() {
         user.insert({
           uid: this.request.body.uid,
           alamat: this.request.body.alamat,
-          kota: this.request.body.kota,
-          provinsi: this.request.body.provinsi,
           avatar: this.request.body.avatar,
           gender: this.request.body.gender,
           no_telp: this.request.body.no_telp,
@@ -99,7 +97,7 @@ export function User() {
     .put(function () {
       var response;
       if (this.params.id !== undefined) {
-        var data = user.find({ _id: this.params.id }).fetch();
+        var data = user.find({ uid: this.params.id }).fetch();
         if (data.length > 0) {
           if (
             user.update(
@@ -108,8 +106,6 @@ export function User() {
                 $set: {
                   uid: this.request.body.uid,
                   alamat: this.request.body.alamat,
-                  kota: this.request.body.kota,
-                  provinsi: this.request.body.provinsi,
                   avatar: this.request.body.avatar,
                   gender: this.request.body.gender,
                   no_telp: this.request.body.no_telp,

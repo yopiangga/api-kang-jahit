@@ -32,15 +32,176 @@ export function Order() {
           id_penjahit: this.request.body.id_penjahit,
           status: this.request.body.status,
           biaya: this.request.body.biaya,
-          order: this.request.body.nama_order,
+          nama_order: this.request.body.nama_order,
           deskripsi: this.request.body.deskripsi,
+          kota: this.request.body.kota,
+          gambar: this.request.body.gambar,
+          batas_selesai: this.request.body.batas_selesai,
+          gps: {
+            latitude: this.request.body.gps.latitude,
+            longitude: this.request.body.gps.longitude,
+          },
           apply_order: this.request.body.apply_order,
-          rating: this.request.body.rating
+          rating: this.request.body.rating,
         });
         response = {
           error: false,
           message: "order added.",
         };
+      }
+      this.response.setHeader("Content-Type", "application/json");
+      this.response.end(JSON.stringify(response));
+    });
+
+  Router.route("/order/konveksi/:uid", { where: "server" })
+
+    // GET /message/:id - returns specific records
+
+    .get(function () {
+      var response;
+      if (this.params.uid !== undefined) {
+        var data = order.find({ id_konveksi: this.params.uid }).fetch();
+        if (data.length > 0) {
+          response = data;
+        } else {
+          response = {
+            error: true,
+            message: "order not found.2",
+          };
+        }
+      }
+      this.response.setHeader("Content-Type", "application/json");
+      this.response.end(JSON.stringify(response));
+    });
+
+
+  Router.route("/order/riwayat/:uid", { where: "server" })
+
+    // GET /message/:id - returns specific records
+
+    .get(function () {
+      var response;
+      if (this.params.uid !== undefined) {
+        var data = order.find({ id_konveksi: this.params.uid, status: 4 }).fetch();
+        if (data.length > 0) {
+          response = data;
+        } else {
+          response = {
+            error: true,
+            message: "order not found.",
+          };
+        }
+      }
+      this.response.setHeader("Content-Type", "application/json");
+      this.response.end(JSON.stringify(response));
+    });
+
+
+  Router.route("/order/diambil/:uid", { where: "server" })
+
+    // GET /message/:id - returns specific records
+
+    .get(function () {
+      var response;
+      if (this.params.uid !== undefined) {
+        var data = order.find({ apply_order: this.params.uid }).fetch();
+        if (data.length > 0) {
+          response = data;
+        } else {
+          response = {
+            error: true,
+            message: "order not found.",
+          };
+        }
+      }
+      this.response.setHeader("Content-Type", "application/json");
+      this.response.end(JSON.stringify(response));
+    });
+
+
+  Router.route("/order/konfirmasi-diambil/:uid", { where: "server" })
+
+    // GET /message/:id - returns specific records
+
+    .get(function () {
+      var response;
+      if (this.params.uid !== undefined) {
+        var data = order.find({ id_konveksi: this.params.uid, status: 2 }).fetch();
+        if (data.length > 0) {
+          response = data;
+        } else {
+          response = {
+            error: true,
+            message: "order not found.",
+          };
+        }
+      }
+      this.response.setHeader("Content-Type", "application/json");
+      this.response.end(JSON.stringify(response));
+    });
+
+    Router.route("/order/penjahit/:uid", { where: "server" })
+
+    // GET /message/:id - returns specific records
+
+    .get(function () {
+      var response;
+      if (this.params.uid !== undefined) {
+        var data = order.find({ id_penjahit: this.params.uid }).fetch();
+        if (data.length > 0) {
+          response = data;
+        } else {
+          response = {
+            error: true,
+            message: "order not found.",
+          };
+        }
+      }
+      this.response.setHeader("Content-Type", "application/json");
+      this.response.end(JSON.stringify(response));
+    });
+
+
+
+    Router.route("/order/penjahit/:uid/:status", { where: "server" })
+
+    // GET /message/:id - returns specific records
+
+    .get(function () {
+      var response;
+      if (this.params.uid !== undefined && this.params.status !== undefined) {
+        var data = order.find({ id_penjahit: this.params.uid, status: parseInt(this.params.status) }).fetch();
+        if (data.length > 0) {
+          response = data;
+        } else {
+          response = {
+            error: true,
+            message: "order not found.",
+          };
+        }
+      }
+      this.response.setHeader("Content-Type", "application/json");
+      this.response.end(JSON.stringify(response));
+    });
+
+
+
+  Router.route("/order/:uid/:status", { where: "server" })
+
+    // GET /message/:id - returns specific records
+
+    .get(function () {
+      var response;
+      if (this.params.uid !== undefined && this.params.status !== undefined) {
+        var data = order.find({ id_konveksi: this.params.uid, status: parseInt(this.params.status) }).fetch();
+        if (data.length > 0) {
+          response = data;
+        } else {
+          response = {
+            error: true,
+            message: "order not found.",
+          };
+        }
       }
       this.response.setHeader("Content-Type", "application/json");
       this.response.end(JSON.stringify(response));
@@ -79,22 +240,21 @@ export function Order() {
               { _id: data[0]._id },
               {
                 $set: {
-                  alamat: this.request.body.alamat,
-                  kota: this.request.body.kota,
-                  provinsi: this.request.body.provinsi,
-                  avatar: this.request.body.avatar,
-                  gender: this.request.body.gender,
-                  no_telp: this.request.body.no_telp,
-                  rating: this.request.body.rating,
-                  saldo: this.request.body.saldo,
-                  tgl_bergabung: this.request.body.tgl_bergabung,
-                  tgl_lahir: this.request.body.tgl_lahir,
-                  email: this.request.body.email,
-                  nama: this.request.body.nama,
+                  id_konveksi: this.request.body.id_konveksi,
+                  id_penjahit: this.request.body.id_penjahit,
+                  status: this.request.body.status,
+                  biaya: this.request.body.biaya,
+                  nama_order: this.request.body.nama_order,
+                  deskripsi: this.request.body.deskripsi,
+
+                  gambar: this.request.body.gambar,
+                  batas_selesai: this.request.body.batas_selesai,
                   gps: {
                     latitude: this.request.body.gps.latitude,
                     longitude: this.request.body.gps.longitude,
                   },
+                  apply_order: this.request.body.apply_order,
+                  rating: this.request.body.rating,
                 },
               }
             ) === 1
