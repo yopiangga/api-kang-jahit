@@ -16,8 +16,6 @@ export function User() {
       if (
         this.request.body.uid === undefined ||
         this.request.body.alamat === undefined ||
-        this.request.body.kota === undefined ||
-        this.request.body.provinsi === undefined ||
         this.request.body.avatar === undefined ||
         this.request.body.gender === undefined ||
         this.request.body.no_telp === undefined ||
