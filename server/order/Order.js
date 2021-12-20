@@ -3,6 +3,13 @@ import { Meteor } from "meteor/meteor";
 export function Order() {
   order = new Meteor.Collection("order");
 
+  Router.route("/count-all-order", { where: "server" })
+    .get(function () {
+      var response = order.find().count();
+      this.response.setHeader("Content-Type", "application/json");
+      this.response.end(JSON.stringify(response));
+    })
+
   Router.route("/order", { where: "server" })
     .get(function () {
       var response = order.find().fetch();

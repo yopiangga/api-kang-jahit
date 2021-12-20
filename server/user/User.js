@@ -3,10 +3,24 @@ import { Meteor } from "meteor/meteor";
 export function User() {
   user = new Meteor.Collection("user");
 
+  Router.route("/count-konveksi", { where: "server" })
+    .get(function () {
+      var response = user.find({ role: 1 }).count();
+      this.response.setHeader("Content-Type", "application/json");
+      this.response.end(JSON.stringify(response));
+    })
+
+  Router.route("/count-penjahit", { where: "server" })
+    .get(function () {
+      var response = user.find({ role: 2 }).count();
+      this.response.setHeader("Content-Type", "application/json");
+      this.response.end(JSON.stringify(response));
+    })
+
   Router.route("/user", { where: "server" })
     .get(function () {
       var response = user.find().fetch();
-      
+
       this.response.setHeader("Content-Type", "application/json");
       this.response.end(JSON.stringify(response));
     })

@@ -6,7 +6,6 @@ import { Topup } from './topup/Topup';
 
 if (Meteor.isServer) {
   
-  
   Meteor.startup(() => {
     // User = new Meteor.Collection('user');
     WebApp.rawConnectHandlers.use(function (req, res, next) {
